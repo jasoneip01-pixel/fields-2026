@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 菲尔兹奖 — 五名得主全览 + 王虹邓煜成长启示录</title>
+<title>2026 Fields & Abacus Medals — 五名得主全览 + 王虹邓煜成长启示录</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,'PingFang SC','Noto Sans SC',sans-serif;background:#0a0a12;color:#e0e0ee;line-height:1.8;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 25% 15%,#1a0a2e 0%,transparent 60%),radial-gradient(ellipse at 75% 85%,#0a1a3e 0%,transparent 50%);pointer-events:none;z-index:-1}
 ::selection{background:#6c5ce7;color:#fff}
+
+/* ── Reading Progress ── */
+.progress-bar{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,#6c5ce7,#fd79a8,#a29bfe);z-index:101;transition:width .1s linear}
 
 /* ── Top Nav ── */
 .top-nav{position:sticky;top:0;z-index:100;background:rgba(10,10,18,.88);backdrop-filter:blur(12px);padding:10px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(108,92,231,.15)}
@@ -18,19 +21,26 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .top-nav .links{display:flex;gap:4px;flex-wrap:wrap}
 .top-nav a{color:#8888bb;text-decoration:none;font-size:.72rem;padding:3px 8px;border-radius:6px;transition:all .3s;white-space:nowrap}
 .top-nav a:hover{color:#a29bfe;background:rgba(108,92,231,.08)}
-.top-nav .toc-toggle{display:none;color:#8888bb;cursor:pointer;font-size:.85rem;padding:4px 10px;border:1px solid rgba(255,255,255,.08);border-radius:6px;background:none}
-@media(max-width:1024px){.top-nav .toc-toggle{display:inline-block}}
+.top-nav .hamburger{display:none;color:#8888bb;cursor:pointer;font-size:.85rem;padding:4px 10px;border:1px solid rgba(255,255,255,.08);border-radius:6px;background:none}
+@media(max-width:1024px){.top-nav .hamburger{display:inline-block}}
 @media(max-width:1024px){.top-nav .links{display:none}}
 .top-nav .links.show{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,18,.96);padding:12px 20px;gap:8px;border-bottom:1px solid rgba(108,92,231,.15)}
 
-/* ── Side TOC (desktop) ── */
-.side-toc{position:fixed;top:60px;right:clamp(0px,calc((100vw - 1060px)/2 - 200px),180px);width:160px;max-height:calc(100vh - 80px);overflow-y:auto;padding:12px 0;z-index:50;scrollbar-width:thin}
+/* ── Side TOC (desktop, collapsible groups) ── */
+.side-toc{position:fixed;top:55px;right:clamp(0px,calc((100vw - 1060px)/2 - 200px),180px);width:170px;max-height:calc(100vh - 70px);overflow-y:auto;padding:8px 0;z-index:50;scrollbar-width:thin}
 .side-toc::-webkit-scrollbar{width:3px}
 .side-toc::-webkit-scrollbar-thumb{background:#6c5ce7;border-radius:2px}
-.side-toc .toc-title{font-size:.68rem;color:#5555aa;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding:0 10px}
-.side-toc a{display:block;font-size:.7rem;color:#8888bb;text-decoration:none;padding:4px 10px;border-radius:4px;transition:all .2s;line-height:1.4;margin:1px 0}
+.side-toc .toc-title{font-size:.62rem;color:#5555aa;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding:0 10px}
+.toc-group{margin-bottom:4px}
+.toc-group-header{font-size:.68rem;color:#7777aa;font-weight:600;padding:4px 10px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:4px;transition:all .2s;user-select:none}
+.toc-group-header:hover{color:#a29bfe;background:rgba(108,92,231,.06)}
+.toc-group-header .arrow{font-size:.55rem;transition:transform .2s;display:inline-block;color:#5555aa;width:12px}
+.toc-group-header .arrow.open{transform:rotate(90deg)}
+.toc-group-items{overflow:hidden;max-height:0;transition:max-height .3s ease;padding-left:6px}
+.toc-group-items.open{max-height:500px}
+.side-toc a{display:block;font-size:.65rem;color:#8888bb;text-decoration:none;padding:3px 10px;border-radius:4px;transition:all .2s;line-height:1.4;margin:1px 0}
 .side-toc a:hover,.side-toc a.active{color:#a29bfe;background:rgba(108,92,231,.08)}
-.side-toc a.sub{font-size:.65rem;padding-left:20px;color:#6666aa}
+.side-toc a.sub{font-size:.62rem;padding-left:18px;color:#6666aa}
 .side-toc a.sub.active{color:#fd79a8}
 
 /* ── Bottom Tab (mobile) ── */
@@ -42,7 +52,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @media(max-width:768px){.side-toc{display:none}}
 
 /* ── Hero ── */
-.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:100px 24px 40px}
+.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 24px 30px;position:relative;overflow:hidden}
+.hero-banner{position:absolute;inset:0;display:flex;opacity:.12;pointer-events:none}
+.hero-banner img{width:20%;height:100%;object-fit:cover;filter:grayscale(.4)}
+.hero-content{position:relative;z-index:2}
 .hero h1{font-size:clamp(2rem,5vw,3.8rem);font-weight:900;background:linear-gradient(135deg,#fd79a8,#6c5ce7,#a29bfe);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shift 6s ease infinite}
 @keyframes shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .hero .sub{font-size:clamp(.9rem,2vw,1.3rem);color:#8888bb;max-width:650px;margin:12px 0}
@@ -66,12 +79,21 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .section p{color:#b0b0cc;font-size:.95rem;margin-bottom:12px;line-height:1.8}
 .highlight{color:#a29bfe;font-weight:600}
 
+/* ── Chapter Image ── */
+.chapter-image{max-width:920px;margin:32px auto;padding:0 24px}
+.chapter-image img{width:100%;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.4);display:block}
+.chapter-image .caption{text-align:center;color:#5555aa;font-size:.72rem;margin-top:8px}
+
 /* ── Winners grid ── */
-.winners-grid{max-width:1100px;margin:0 auto;padding:30px 24px 50px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.winners-grid{max-width:1100px;margin:0 auto;padding:30px 24px 50px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
 .winner-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;transition:transform .3s,border-color .3s}
 .winner-card:hover{transform:translateY(-4px);border-color:rgba(108,92,231,.3)}
 .winner-card.fields{border-top:3px solid #6c5ce7}
 .winner-card.abacus{border-top:3px solid #fd79a8}
+.winner-card.featured{grid-column:span 1}
+.winner-card.featured .winner-img{height:280px}
+.winner-card.featured .winner-info{background:linear-gradient(0deg,rgba(10,10,18,.95) 0%,rgba(10,10,18,.7) 70%,transparent 100%);position:relative;margin-top:-80px;padding:20px 20px 16px}
+.winner-card.featured .winner-img{position:relative}
 .winner-img{height:200px;background-size:cover;background-position:center 30%}
 .winner-info{padding:20px}
 .prize-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.72rem;font-weight:600;letter-spacing:1px;margin-bottom:8px}
@@ -83,8 +105,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .winner-desc{color:#9999bb;font-size:.85rem;line-height:1.6;margin-bottom:12px}
 .read-more{color:#6c5ce7;text-decoration:none;font-size:.8rem;font-weight:500}
 .read-more:hover{color:#a29bfe}
-@media(max-width:768px){.winners-grid{grid-template-columns:1fr;padding:24px 12px}.winner-info{padding:14px}}
-@media(max-width:768px){.winner-img{height:160px}}
+@media(max-width:900px){.winners-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.winners-grid{grid-template-columns:1fr;padding:24px 12px}.winner-img{height:160px}.winner-card.featured .winner-img{height:220px}}
 @media(max-width:480px){.winners-grid{gap:14px}}
 
 /* ── Rules grid ── */
@@ -93,7 +115,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .rule-card .icon{font-size:1.8rem;margin-bottom:6px}
 .rule-card h4{font-size:.85rem;font-weight:600;margin-bottom:4px;color:#ddddee}
 .rule-card p{font-size:.78rem;color:#8888bb}
-@media(max-width:480px){.rules-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.rules-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ── Timeline ── */
 .history{max-width:800px;margin:0 auto;padding:20px 24px 40px}
@@ -101,7 +123,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .timeline-year{font-weight:800;color:#6c5ce7;font-size:.9rem;min-width:60px}
 .timeline-text{color:#b0b0cc;font-size:.88rem}
 
-/* ── Significance ── */
+/* ── Big card ── */
 .big-card{background:linear-gradient(135deg,rgba(108,92,231,.1),rgba(253,121,168,.06));border:1px solid rgba(108,92,231,.2);border-radius:16px;padding:32px;margin:0 24px 40px;max-width:800px}
 .big-card p{color:#ccccee;font-size:.95rem;margin-bottom:10px}
 .big-card .key{background:rgba(253,121,168,.08);border-radius:8px;padding:12px 16px;margin:12px 0;color:#fd79a8;font-size:.88rem;border-left:3px solid #fd79a8}
@@ -128,8 +150,25 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .story-card .quote{background:rgba(108,92,231,.06);border-left:3px solid #6c5ce7;padding:12px 16px;margin:10px 0;border-radius:0 8px 8px 0;color:#a29bfe;font-size:.85rem;font-style:italic}
 .story-card .fact{background:rgba(253,121,168,.06);border-left:3px solid #fd79a8;padding:10px 14px;margin:8px 0;border-radius:0 8px 8px 0;color:#fd79a8;font-size:.82rem}
 @media(max-width:768px){.story-card{padding:18px 20px}}
-@media(max-width:480px){.story-card{padding:14px 16px}}
-@media(max-width:480px){.story-card h3{font-size:.95rem}.story-card p{font-size:.85rem}.story-card .quote,.story-card .fact{font-size:.8rem;padding:8px 12px}}
+@media(max-width:480px){.story-card{padding:14px 16px}.story-card h3{font-size:.95rem}.story-card p{font-size:.85rem}.story-card .quote,.story-card .fact{font-size:.8rem;padding:8px 12px}}
+
+/* ── Other winners grid (3-col) ── */
+.other-winners-grid{max-width:1100px;margin:0 auto;padding:20px 24px 40px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.other-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;transition:transform .3s,border-color .3s}
+.other-card:hover{transform:translateY(-4px);border-color:rgba(108,92,231,.3)}
+.other-card .card-img{height:200px;background-size:cover;background-position:center 20%}
+.other-card .card-body{padding:20px}
+.other-card .card-body h3{font-size:1rem;font-weight:700;color:#ddddee;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.other-card .card-body .prize-tag-sm{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.65rem;font-weight:600;background:rgba(108,92,231,.15);color:#a29bfe}
+.other-card .card-body .prize-tag-sm.abacus-sm{background:rgba(253,121,168,.15);color:#fd79a8}
+.other-card .card-body p{color:#9999bb;font-size:.82rem;line-height:1.7;margin-top:6px}
+@media(max-width:900px){.other-winners-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.other-winners-grid{grid-template-columns:1fr}}
+
+/* ── Math diagram ── */
+.math-diagram{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:32px 28px;margin:16px 0;overflow:hidden}
+.math-diagram h3{font-size:1.05rem;font-weight:600;color:#ddddee;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.math-diagram svg{display:block;margin:0 auto;max-width:100%}
 
 /* ── Insight box ── */
 .insight-box{background:linear-gradient(135deg,rgba(108,92,231,.06),rgba(253,121,168,.03));border:1px solid rgba(108,92,231,.15);border-radius:16px;padding:32px;margin:20px 0}
@@ -162,55 +201,97 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 footer{text-align:center;padding:48px 24px;color:#5555aa;font-size:.8rem;border-top:1px solid rgba(108,92,231,.06)}
 footer a{color:#6c5ce7;text-decoration:none}
 
-/* ── Section spacing tweaks ── */
+/* ── Section spacing ── */
 @media(max-width:768px){.section{padding:32px 16px}}
 @media(max-width:480px){.section{padding:24px 12px}}
 @media(max-width:768px){.big-card{padding:24px;margin:0 12px}}
 @media(max-width:480px){.big-card{padding:20px;margin:0 8px}}
+@media(max-width:768px){.chapter-image{padding:0 12px}}
+
+/* ── Fade-in animation ── */
+.section{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+
+/* ── Photo credit ── */
+.photo-credits{max-width:880px;margin:0 auto;padding:16px 24px;font-size:.72rem;color:#5555aa;line-height:1.8}
 </style>
 </head>
 <body>
 
+<div class="progress-bar" id="progressBar"></div>
+
 <!-- ═══ TOP NAV ═══ -->
 <nav class="top-nav">
   <div class="logo">🏆 Fields 2026 <span>ICM Philadelphia</span></div>
-  <button class="toc-toggle" onclick="this.nextElementSibling.classList.toggle('show')">☰</button>
+  <button class="hamburger" onclick="this.nextElementSibling.classList.toggle('show')">☰</button>
   <div class="links">
     <a href="#winners">总览</a>
     <a href="#rules">规则</a>
     <a href="#timeline">时间线</a>
     <a href="#wang">王虹</a>
     <a href="#deng">邓煜</a>
-    <a href="#math">数学</a>
-    <a href="#inspiring">启发</a>
+    <a href="#other-winners">Tsimerman</a>
+    <a href="#pardon">Pardon</a>
+    <a href="#gharan">Gharan</a>
     <a href="#sources">信源</a>
   </div>
 </nav>
 
-<!-- ═══ SIDE TOC (desktop) ═══ -->
+<!-- ═══ SIDE TOC (desktop, collapsible groups) ═══ -->
 <div class="side-toc" id="sideToc">
   <div class="toc-title">📋 目录</div>
-  <a href="#winners" data-section="winners">🏅 获奖者总览</a>
-  <a href="#rules" class="sub" data-section="rules">📋 规则</a>
-  <a href="#timeline" class="sub" data-section="timeline">📜 时间线</a>
-  <a href="#wang" data-section="wang">🧬 王虹</a>
-  <a href="#wang1" class="sub" data-section="wang1">童年·桂林</a>
-  <a href="#wang2" class="sub" data-section="wang2">目标北大</a>
-  <a href="#wang3" class="sub" data-section="wang3">法国·建筑</a>
-  <a href="#wang4" class="sub" data-section="wang4">MIT</a>
-  <a href="#wang5" class="sub" data-section="wang5">Kakeya 证明</a>
-  <a href="#wang6" class="sub" data-section="wang6">今天</a>
-  <a href="#deng" data-section="deng">🎲 邓煜</a>
-  <a href="#deng1" class="sub" data-section="deng1">童年·深圳</a>
-  <a href="#deng2" class="sub" data-section="deng2">围棋少年</a>
-  <a href="#deng3" class="sub" data-section="deng3">IMO 金牌</a>
-  <a href="#deng4" class="sub" data-section="deng4">MIT→Princeton</a>
-  <a href="#deng5" class="sub" data-section="deng5">低谷·诗</a>
-  <a href="#deng6" class="sub" data-section="deng6">突破</a>
-  <a href="#deng7" class="sub" data-section="deng7">今天</a>
-  <a href="#math" data-section="math">🔬 数学解读</a>
-  <a href="#inspiring" data-section="inspiring">🌱 启发</a>
-  <a href="#sources" data-section="sources">📰 信源</a>
+
+  <div class="toc-group">
+    <div class="toc-group-header" onclick="toggleGroup(this)"><span class="arrow open">▶</span> 📋 总览</div>
+    <div class="toc-group-items open">
+      <a href="#winners" class="sub" data-section="winners">🏅 获奖者</a>
+      <a href="#rules" class="sub" data-section="rules">📋 规则</a>
+      <a href="#timeline" class="sub" data-section="timeline">📜 时间线</a>
+    </div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-header" onclick="toggleGroup(this)"><span class="arrow open">▶</span> 🧬 王虹</div>
+    <div class="toc-group-items open">
+      <a href="#wang1" class="sub" data-section="wang1">童年·桂林</a>
+      <a href="#wang2" class="sub" data-section="wang2">北大转系</a>
+      <a href="#wang3" class="sub" data-section="wang3">法国·建筑</a>
+      <a href="#wang4" class="sub" data-section="wang4">MIT·导师</a>
+      <a href="#wang5" class="sub" data-section="wang5">Kakeya 证明</a>
+      <a href="#wang6" class="sub" data-section="wang6">今天</a>
+    </div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-header" onclick="toggleGroup(this)"><span class="arrow open">▶</span> 🎲 邓煜</div>
+    <div class="toc-group-items open">
+      <a href="#deng1" class="sub" data-section="deng1">童年·深圳</a>
+      <a href="#deng2" class="sub" data-section="deng2">围棋少年</a>
+      <a href="#deng3" class="sub" data-section="deng3">IMO 金牌</a>
+      <a href="#deng4" class="sub" data-section="deng4">MIT→Princeton</a>
+      <a href="#deng5" class="sub" data-section="deng5">低谷·写诗</a>
+      <a href="#deng6" class="sub" data-section="deng6">突破</a>
+      <a href="#deng7" class="sub" data-section="deng7">今天</a>
+    </div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-header" onclick="toggleGroup(this)"><span class="arrow open">▶</span> 🔬 其他获奖者</div>
+    <div class="toc-group-items open">
+      <a href="#other-winners" class="sub" data-section="other-winners">Tsimerman</a>
+      <a href="#pardon" class="sub" data-section="pardon">Pardon</a>
+      <a href="#gharan" class="sub" data-section="gharan">Gharan</a>
+    </div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-header" onclick="toggleGroup(this)"><span class="arrow open">▶</span> 🌱 启发·信源</div>
+    <div class="toc-group-items open">
+      <a href="#math" class="sub" data-section="math">🔬 数学解读</a>
+      <a href="#inspiring" class="sub" data-section="inspiring">🌱 启发对比</a>
+      <a href="#sources" class="sub" data-section="sources">📰 信源</a>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ BOTTOM TABS (mobile) ═══ -->
@@ -218,16 +299,25 @@ footer a{color:#6c5ce7;text-decoration:none}
   <a class="bottom-tab" href="#winners"><span class="icon">🏅</span>总览</a>
   <a class="bottom-tab" href="#wang"><span class="icon">🧬</span>王虹</a>
   <a class="bottom-tab" href="#deng"><span class="icon">🎲</span>邓煜</a>
-  <a class="bottom-tab" href="#math"><span class="icon">🔬</span>数学</a>
+  <a class="bottom-tab" href="#other-winners"><span class="icon">👤</span>其他</a>
   <a class="bottom-tab" href="#inspiring"><span class="icon">🌱</span>启发</a>
 </div>
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
-  <h1>2026 Fields & Abacus Medals</h1>
-  <p class="sub">菲尔兹奖·阿巴克斯奖 — 四名 Fields、一名 Abacus<br>来自 Quanta Magazine 的 ICM 2026 专题报道</p>
-  <p class="meta">July 23, 2026 · Philadelphia · Quanta Magazine (Simons Foundation)</p>
-  <div class="tagline">🇨🇳 两位中国籍数学家同届获奖 — 90 年首次</div>
+  <div class="hero-banner">
+    <img src="assets/images/wang-hong-portrait.webp" alt="">
+    <img src="assets/images/yu-deng-portrait.webp" alt="">
+    <img src="assets/images/tsimerman-portrait.webp" alt="">
+    <img src="assets/images/pardon-portrait.webp" alt="">
+    <img src="assets/images/gharan-portrait.webp" alt="">
+  </div>
+  <div class="hero-content">
+    <h1>2026 Fields & Abacus Medals</h1>
+    <p class="sub">菲尔兹奖·阿巴克斯奖 — 四名 Fields、一名 Abacus<br>来自 Quanta Magazine 的 ICM 2026 专题报道</p>
+    <p class="meta">July 23, 2026 · Philadelphia · Quanta Magazine (Simons Foundation)</p>
+    <div class="tagline">🇨🇳 两位中国籍数学家同届获奖 — 90 年首次</div>
+  </div>
 </div>
 
 <!-- Stats -->
@@ -246,8 +336,8 @@ footer a{color:#6c5ce7;text-decoration:none}
 </section>
 
 <div class="winners-grid">
-  <div class="winner-card fields">
-    <div class="winner-img" style="background-image:url('assets/images/wang-hong-lede.webp')"></div>
+  <div class="winner-card fields featured">
+    <div class="winner-img" style="background-image:url('assets/images/wang-hong-lede.webp');background-position:center 20%"></div>
     <div class="winner-info">
       <div class="prize-badge">Fields Medal</div>
       <h3>Hong Wang <span class="zh-name">王虹</span></h3>
@@ -256,8 +346,8 @@ footer a{color:#6c5ce7;text-decoration:none}
       <a class="read-more" href="#wang">📖 阅读成长历程 →</a>
     </div>
   </div>
-  <div class="winner-card fields">
-    <div class="winner-img" style="background-image:url('assets/images/yu-deng-lede.webp')"></div>
+  <div class="winner-card fields featured">
+    <div class="winner-img" style="background-image:url('assets/images/yu-deng-lede.webp');background-position:center 20%"></div>
     <div class="winner-info">
       <div class="prize-badge">Fields Medal</div>
       <h3>Yu Deng <span class="zh-name">邓煜</span></h3>
@@ -272,8 +362,8 @@ footer a{color:#6c5ce7;text-decoration:none}
       <div class="prize-badge">Fields Medal</div>
       <h3>Jacob Tsimerman</h3>
       <div class="citation">André-Oort 猜想证明</div>
-      <p class="winner-desc">多伦多大学 · 数论与代数几何 · André-Oort 猜想完整证明</p>
-      <a class="read-more" href="https://www.quantamagazine.org/jacob-tsimerman-wins-2026-fields-medal-for-andre-oort-conjecture-proof-20260723/" target="_blank">Read full article →</a>
+      <p class="winner-desc">多伦多大学 · 数论与代数几何</p>
+      <a class="read-more" href="#other-winners">📖 阅读 →</a>
     </div>
   </div>
   <div class="winner-card fields">
@@ -283,17 +373,17 @@ footer a{color:#6c5ce7;text-decoration:none}
       <h3>John Pardon</h3>
       <div class="citation">辛几何中的重大突破</div>
       <p class="winner-desc">Duke / Stony Brook · 辛几何与低维拓扑</p>
-      <a class="read-more" href="https://www.quantamagazine.org/john-pardon-wins-the-2026-fields-medal-for-work-in-symplectic-geometry-20260723/" target="_blank">Read full article →</a>
+      <a class="read-more" href="#pardon">📖 阅读 →</a>
     </div>
   </div>
   <div class="winner-card abacus">
-    <div class="winner-img" style="background-image:url('assets/images/oveis-gharan-portrait.webp')"></div>
+    <div class="winner-img" style="background-image:url('assets/images/gharan-portrait.webp')"></div>
     <div class="winner-info">
       <div class="prize-badge">Abacus Medal</div>
       <h3>Shayan Oveis Gharan</h3>
       <div class="citation">旅行商问题的算法突破</div>
       <p class="winner-desc">UW · TSP 近似算法 · 理论计算机科学</p>
-      <a class="read-more" href="https://www.quantamagazine.org/shayan-oveis-gharan-wins-2026-imu-abacus-medal-20260723/" target="_blank">Read full article →</a>
+      <a class="read-more" href="#gharan">📖 阅读 →</a>
     </div>
   </div>
 </div>
@@ -319,15 +409,15 @@ footer a{color:#6c5ce7;text-decoration:none}
 <div class="history">
   <div class="timeline-item"><div class="timeline-year">1982</div><div class="timeline-text"><strong>丘成桐</strong> — 华裔（美国籍），卡拉比猜想·微分几何</div></div>
   <div class="timeline-item"><div class="timeline-year">2006</div><div class="timeline-text"><strong>陶哲轩</strong> — 华裔（澳大利亚籍），调和分析·素数序列</div></div>
-  <div class="timeline-item" style="background:rgba(108,92,231,.06);border-radius:8px;padding:10px 0"><div class="timeline-year">2026</div><div class="timeline-text"><span class="highlight">王虹 🎉</span> — <strong>中国籍，首位中国籍女性</strong>，三维 Kakeya 猜想</div></div>
-  <div class="timeline-item" style="background:rgba(108,92,231,.06);border-radius:8px;padding:10px 0"><div class="timeline-year">2026</div><div class="timeline-text"><span class="highlight">邓煜 🎉</span> — <strong>中国籍</strong>，随机数据偏微分方程</div></div>
+  <div class="timeline-item" style="background:rgba(108,92,231,.06);border-radius:8px;padding:10px 0"><div class="timeline-year">2026 🎉</div><div class="timeline-text"><span class="highlight">王虹</span> — <strong>中国籍，首位中国籍女性</strong>，三维 Kakeya 猜想</div></div>
+  <div class="timeline-item" style="background:rgba(108,92,231,.06);border-radius:8px;padding:10px 0"><div class="timeline-year">2026 🎉</div><div class="timeline-text"><span class="highlight">邓煜</span> — <strong>中国籍</strong>，随机数据偏微分方程</div></div>
 </div>
 
 <!-- Significance -->
 <div class="big-card">
   <p><strong>⚡ 为什么 2026 年是历史性的？</strong></p>
   <p>王虹是 Fields 奖 90 年历史中第三位女性得主（前两位：Maryam Mirzakhani 2014, 乌克兰数学家未提及）。两位中国籍同届获奖——不仅是数学实力的体现，也反映了中国数学教育体系的培养成果。</p>
-  <div class="key">🔑 给牧之的核心信息：王虹和邓煜都从北大数学出发，在各自领域选择了"别人不敢碰的硬问题"，用十年时间啃下来。Fields Medal 不奖励"聪明"，奖励"在公认的难题上做出了无法忽视的突破"。</div>
+  <div class="key">🔑 王虹和邓煜都从北大数学出发，在各自领域选择了"别人不敢碰的硬问题"，用十年时间啃下来。Fields Medal 不奖励"聪明"，奖励"在公认的难题上做出了无法忽视的突破"。</div>
 </div>
 
 <div class="divider">✦ ✦ ✦</div>
@@ -349,6 +439,8 @@ footer a{color:#6c5ce7;text-decoration:none}
   </div>
 </div>
 
+<div class="chapter-image"><img src="assets/images/wang-bridge.webp" alt="桂林桥景" loading="lazy"><div class="caption">📍 桂林 · 童年成长的地方 — Julien Pebrel/M.Y.O.P. for Quanta Magazine</div></div>
+
 <div class="story-card" id="wang1" data-nav="wang1">
   <h3><span class="num" style="background:#a29bfe">1</span> 童年：桂林山水间的自由</h3>
   <p>1990 年代，王虹在桂林长大。父母都是学校老师，对她的学业没有任何压力。放学回家，她读希腊神话、哈利·波特和《指环王》，看电视，打乒乓球。一家三口会在傍晚沿着漓江散步。</p>
@@ -357,11 +449,15 @@ footer a{color:#6c5ce7;text-decoration:none}
   <div class="fact">💡 6 岁时，她解出了"如何种 7 棵树得到最多的三树成行"——答案：正等边三角形，6 行。比她当数学老师的父亲还快。后来她意识到，这道题本质就是她毕生研究的"物体如何重叠"的雏形。</div>
 </div>
 
+<div class="chapter-image"><img src="assets/images/wang-desk.webp" alt="书桌学习" loading="lazy"><div class="caption">📍 勤奋学习的日子 — Julien Pebrel/M.Y.O.P. for Quanta Magazine</div></div>
+
 <div class="story-card" id="wang2" data-nav="wang2">
   <h3><span class="num" style="background:#a29bfe">2</span> 初中到高中：目标北大</h3>
   <p>王虹的目标是北京大学数学系。但北大在她们省只招<strong>一个</strong>数学系名额，她的分数不是最高。她以<strong>地球科学</strong>专业考入北大，计划转系。地球物理学的教授鼓励了她——地震波探测地球内部的数学，恰好跟 Kakeya 问题有关。她拼命努力，最终转系成功。</p>
   <div class="quote">她爸随口说：分析比代数简单。王虹偏不听，故意选了代数。后来才发现自己更适合分析。</div>
 </div>
+
+<div class="chapter-image"><img src="assets/images/wang-window.webp" alt="窗前景象" loading="lazy"><div class="caption">📍 巴黎 · 她曾在这里读建筑 — Julien Pebrel/M.Y.O.P. for Quanta Magazine</div></div>
 
 <div class="story-card" id="wang3" data-nav="wang3">
   <h3><span class="num" style="background:#a29bfe">3</span> 法国：语言不通 + 转去学建筑</h3>
@@ -369,16 +465,22 @@ footer a{color:#6c5ce7;text-decoration:none}
   <div class="quote">"学建筑时没有压力……但不知道目标是什么。于是我又回到了数学。"——王虹</div>
 </div>
 
+<div class="chapter-image"><img src="assets/images/wang-duo.webp" alt="与Zahl合影" loading="lazy"><div class="caption">📍 与 Joshua Zahl 合作，破解 Kakeya 猜想 — Julien Pebrel/M.Y.O.P. for Quanta Magazine</div></div>
+
 <div class="story-card" id="wang4" data-nav="wang4">
   <h3><span class="num" style="background:#a29bfe">4</span> MIT：遇到对的问题</h3>
   <p>2013 年 MIT 研究实习，Larry Guth 用极清晰的方式讲了一个与 Kakeya 问题紧密相连的证明。她第二年申请了 MIT 的博士，选 Guth 做导师。一年内，他们一起解决了多个 Kakeya 相关变种。</p>
 </div>
+
+<div class="chapter-image"><img src="assets/images/wang-paper.webp" alt="论文与研究" loading="lazy"><div class="caption">📍 127 页的证明——三年来每天在 Zulip 上与 Zahl 讨论 — Julien Pebrel/M.Y.O.P. for Quanta Magazine</div></div>
 
 <div class="story-card" id="wang5" data-nav="wang5">
   <h3><span class="num" style="background:#a29bfe">5</span> 攻坚：127 页证明</h3>
   <p>2020 年疫情期间在普林斯顿高等研究院做博后的王虹转向三维 Kakeya 猜想——已经困扰数学界几十年。她与 Joshua Zahl 合作，假设存在反例→证明其结构自相矛盾。2025 年 2 月发布<strong>127 页完整证明</strong>。没有发现错误。</p>
   <div class="fact">💡 之后一连串奖项：Salem 奖、Ostrowski 奖、ICCM 金奖、Ambrosetti 奖、Sadosky 奖、Clay 研究奖、New Horizons 数学奖——然后是 Fields Medal。</div>
 </div>
+
+<div class="chapter-image"><img src="assets/images/wang-hong-portrait.webp" alt="王虹全身像" loading="lazy"><div class="caption">📍 今天的王虹 — Julien Pebrel/M.Y.O.P. for Quanta Magazine</div></div>
 
 <div class="story-card" id="wang6" data-nav="wang6">
   <h3><span class="num" style="background:#a29bfe">6</span> 今天的王虹</h3>
@@ -405,12 +507,16 @@ footer a{color:#6c5ce7;text-decoration:none}
   </div>
 </div>
 
+<div class="chapter-image"><img src="assets/images/deng-walk.webp" alt="邓煜漫步" loading="lazy"><div class="caption">📍 深圳渔村出生长大 — Kristen Normand for Quanta Magazine</div></div>
+
 <div class="story-card" id="deng1" data-nav="deng1">
   <h3><span class="num" style="background:#fd79a8">1</span> 童年：深圳渔村里的读书娃</h3>
   <p>邓煜出生那年全家搬到深圳——十年前还是渔村。他的蛇口工业区曾是"非常不发达的地区"。几年内变成干净街道、地铁、公园。海报上喊着：时间就是金钱！效率就是生命！</p>
   <p>到五六岁就读完了妈妈的医学教科书。</p>
   <div class="quote">"最有效的惩罚就是不许他看书。"——邓煜妈妈</div>
 </div>
+
+<div class="chapter-image"><img src="assets/images/deng-profile.webp" alt="邓煜侧脸专注" loading="lazy"><div class="caption">📍 专注的侧脸，一如当年对弈时的神情 — Kristen Normand for Quanta Magazine</div></div>
 
 <div class="story-card" id="deng2" data-nav="deng2">
   <h3><span class="num" style="background:#fd79a8">2</span> 围棋少年：差一场的职业梦</h3>
@@ -429,16 +535,23 @@ footer a{color:#6c5ce7;text-decoration:none}
   <div class="quote">"他非常擅长抓住事情的本质。"——导师 Alexandru Ionescu</div>
 </div>
 
+<div class="chapter-image"><img src="assets/images/deng-poem.webp" alt="李商隐诗手迹" loading="lazy"><div class="caption">📍 李商隐《锦瑟》——最低谷时，邓煜用格律诗救赎自己 — Kristen Normand for Quanta Magazine</div></div>
+
 <div class="story-card" id="deng5" data-nav="deng5">
+  <h5 style="color:#fd79a8;font-size:.8rem;font-weight:600;margin-bottom:6px">⭐ 关键转折</h5>
   <h3><span class="num" style="background:#fd79a8">5</span> 低谷：焦虑、自我怀疑与救赎</h3>
   <p>想在随机数据问题上突破——但工具不够用。2017 年博后快结束，没拿到理想教职。他开始写诗——李商隐式的格律诗。独自去长滩海岸徘徊，一周没工作后，"自动感觉需要做数学了"。</p>
   <div class="fact">💡 他不是通过医生或朋友走出低谷——而是写诗。严格的形式给了他在规则中安放混乱情绪的空间。他最爱李商隐的《锦瑟》。</div>
 </div>
 
+<div class="chapter-image"><img src="assets/images/deng-think.webp" alt="邓煜凝思" loading="lazy"><div class="caption">📍 凝思中的邓煜 — Kristen Normand for Quanta Magazine</div></div>
+
 <div class="story-card" id="deng6" data-nav="deng6">
   <h3><span class="num" style="background:#fd79a8">6</span> 突破：与概率握手</h3>
   <p>2018 年 USC 教职。与 Yue、Nahmod 组队攻克二维薛定谔方程——证明即使从随机粗糙的初始波出发，方程仍有解且 Gibbs 测度不变。后来与 Hani 合作将微观方程与宏观波动力学连接起来。</p>
 </div>
+
+<div class="chapter-image"><img src="assets/images/yu-deng-office.webp" alt="邓煜办公室" loading="lazy"><div class="caption">📍 UChicago 的办公室——客厅几乎是空的，只有一张桌子、一块白板 — Quanta Magazine</div></div>
 
 <div class="story-card" id="deng7" data-nav="deng7">
   <h3><span class="num" style="background:#fd79a8">7</span> 今天的邓煜</h3>
@@ -446,6 +559,66 @@ footer a{color:#6c5ce7;text-decoration:none}
   <div class="fact">💡 座右铭来自墙上的《锦瑟》："此情可待成追忆，只是当时已惘然。"他喜欢那种"站在远处看自己"的感觉。</div>
 </div>
 </section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══════ OTHER WINNERS ═══════ -->
+<section class="section" id="other-winners" data-nav="other-winners">
+<div class="tag" style="color:#6c5ce7;border-color:#6c5ce7">🔬 其他获奖者</div>
+<h2>另外三位突破者</h2>
+<p>除了王虹和邓煜，2026 年还有两位 Fields Medalist 和一位 Abacus Medalist——他们的故事同样值得细读。</p>
+</section>
+
+<div class="other-winners-grid">
+  <!-- Tsimerman -->
+  <div class="other-card" id="tsimerman-card">
+    <div class="card-img" style="background-image:url('assets/images/tsimerman-lede.webp');background-position:center 25%"></div>
+    <div class="card-body">
+      <h3>Jacob Tsimerman <span class="prize-tag-sm">Fields</span></h3>
+      <p style="color:#6c5ce7;font-size:.8rem;font-weight:500;margin:4px 0">André-Oort 猜想证明</p>
+      <p><strong>🇺🇦 乌克兰裔加拿大 · 38岁</strong></p>
+      <p><strong>教育：</strong>多伦多大学本科 → Princeton 博士（导师 Peter Sarnak）</p>
+      <p><strong>核心成果：</strong>证明 André-Oort 猜想——连接数论与代数几何的深层猜想，将复乘理论推广到 Shimura 簇。</p>
+      <p><strong>有趣细节：</strong>Tsimerman 说数学不是关于"真理与美"，而是关于"赢"。他的思维方式是：先看到终点，再一步步倒推回来。少年时在加拿大数学竞赛中几乎答错所有题，后来连续两年 IMO 金牌。一个充满竞争欲望的人——但他说自己"花了两年时间努力不对 Fields Medal 上瘾"，最后两年还是"允许自己沉迷"。</p>
+      <p><strong>一句话：</strong>用十余年攻克数论与代数几何交叉的高峰 André-Oort 猜想。</p>
+    </div>
+  </div>
+
+  <!-- Pardon -->
+  <div class="other-card" id="pardon" data-nav="pardon">
+    <div class="card-img" style="background-image:url('assets/images/pardon-lede.webp');background-position:center 15%"></div>
+    <div class="card-body">
+      <h3>John Pardon <span class="prize-tag-sm">Fields</span></h3>
+      <p style="color:#6c5ce7;font-size:.8rem;font-weight:500;margin:4px 0">辛几何的重大突破</p>
+      <p><strong>🇺🇸 美国 · 37岁</strong></p>
+      <p><strong>教育：</strong>Princeton 本科（全年级第一毕业） → Stanford 博士</p>
+      <p><strong>核心成果：</strong>辛几何和低维拓扑的突破——用全新的代数工具解决经典几何问题，包括六维流形猜想和纽结理论与辛几何的深层联系。每篇论文都是重量级突破。</p>
+      <p><strong>有趣细节：</strong>Pardon 以沉默著称。一位前学生说："你真的得去打捞他的知识。"大一某次晚宴上，János Kollár 随口向他提起一个拓扑难题——两周后 Pardon 发来了解法，比 Kollár 需要的更一般、更优雅。25 岁时就解决了遗留问题。他不喜欢谈论自己，本科毕业致辞问："你上一次有真正的原创想法是什么时候？"他认为有原创想法≈"部分疯癫"。会拉大提琴，本科期间学中文流利到赢新加坡中文辩论赛。</p>
+      <p><strong>一句话：</strong>用沉默和精确的原创思维重写了辛几何的规则。</p>
+    </div>
+  </div>
+
+  <!-- Gharan -->
+  <div class="other-card" id="gharan" data-nav="gharan">
+    <div class="card-img" style="background-image:url('assets/images/gharan-lede.webp');background-position:center 15%"></div>
+    <div class="card-body">
+      <h3>Shayan Oveis Gharan <span class="prize-tag-sm abacus-sm">Abacus</span></h3>
+      <p style="color:#fd79a8;font-size:.8rem;font-weight:500;margin:4px 0">旅行商问题算法突破</p>
+      <p><strong>🇮🇷 伊朗裔 · 39岁</strong></p>
+      <p><strong>教育：</strong>Sharif University of Technology 本科 → UIUC 博士</p>
+      <p><strong>核心成果：</strong>旅行商问题（TSP）的近似算法突破——首次将代数图论与概率论结合，大幅提升近似比。还解决了"从大量对象中均匀随机选择"的基本问题。</p>
+      <p><strong>有趣细节：</strong>伊朗伊斯法罕出生，母亲年轻时被迫放弃学数学（"女孩不应该学数学"），于是把希望寄托在孩子身上。他在伊朗经历了战争、制裁、母校被轰炸。尽管外部动荡，他保持乐观——"我喜欢说事情是可能的"。做研究坐不住，在椅子上转来转去，他妻子笑他"像只猴子"。</p>
+      <p><strong>一句话：</strong>将数论和代数工具引入理论计算机科学，刷新了 TSP 半个世纪的近似记录。</p>
+    </div>
+  </div>
+</div>
+
+<!-- Additional Tsimerman/Pardon images -->
+<div class="chapter-image" style="max-width:1100px"><img src="assets/images/tsimerman-wide.webp" alt="Tsimerman 思考" loading="lazy"><div class="caption">📍 Jacob Tsimerman 在普林斯顿高等研究院 — Caroline Gutman for Quanta Magazine</div></div>
+
+<div class="chapter-image" style="max-width:1100px"><img src="assets/images/pardon-triptych.webp" alt="Pardon 三联照" loading="lazy"><div class="caption">📍 John Pardon — Phil Yam for Quanta Magazine</div></div>
+
+<div class="chapter-image" style="max-width:1100px"><img src="assets/images/gharan-vertical.webp" alt="Gharan 肖像" loading="lazy"><div class="caption">📍 Shayan Oveis Gharan — Chona Kasinger for Quanta Magazine</div></div>
 
 <div class="divider">✦ ✦ ✦</div>
 
@@ -465,6 +638,53 @@ footer a{color:#6c5ce7;text-decoration:none}
   <p>PDE 描述了波如何传播——但物理世界的初始条件从来不是平滑的，而是充满噪声。邓煜证明：即使初始条件极其混乱，方程仍然有解，且 Gibbs 测度保持稳定。他还证明了微观薛定谔方程在长时间下会收敛到宏观波动力学方程。</p>
   <div class="fact">💡 从天气预报到量子力学，几乎所有科学和工程都依赖 PDE。邓煜的工作证明这些方程在真实世界中是可靠的。</div>
 </div>
+
+<!-- Math diagram card -->
+<div class="math-diagram">
+  <h3><span class="num" style="background:#6c5ce7">3</span> 简化示意图：Kakeya 直觉</h3>
+  <p style="color:#9999bb;font-size:.85rem;margin-bottom:16px">下面是一维→二维→三维的 Kakeya 直觉：一根针旋转需要的最小区域。</p>
+  <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg">
+    <!-- 一维线段的旋转 -->
+    <text x="20" y="25" fill="#a29bfe" font-size="13" font-weight="600">1D 线段旋转 → 需要二维面积</text>
+    <line x1="30" y1="60" x2="130" y2="60" stroke="#fd79a8" stroke-width="2" opacity=".6"/>
+    <line x1="130" y1="60" x2="100" y2="140" stroke="#fd79a8" stroke-width="2" opacity=".6"/>
+    <line x1="100" y1="140" x2="30" y2="140" stroke="#fd79a8" stroke-width="2" opacity=".6"/>
+    <line x1="30" y1="140" x2="30" y2="60" stroke="#fd79a8" stroke-width="2" opacity=".6"/>
+    <ellipse cx="80" cy="100" rx="50" ry="40" fill="rgba(253,121,168,.08)" stroke="rgba(253,121,168,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="80" y1="80" x2="120" y2="100" stroke="#a29bfe" stroke-width="1.5" opacity=".5"/>
+    <line x1="80" y1="80" x2="65" y2="120" stroke="#a29bfe" stroke-width="1.5" opacity=".5"/>
+    <line x1="80" y1="80" x2="40" y2="95" stroke="#a29bfe" stroke-width="1.5" opacity=".5"/>
+    <line x1="80" y1="80" x2="100" y2="60" stroke="#a29bfe" stroke-width="1.5" opacity=".5"/>
+    <!-- 2D 管子重叠 -->
+    <text x="230" y="25" fill="#a29bfe" font-size="13" font-weight="600">2D 管子重叠 → Kakeya 猜想</text>
+    <rect x="240" y="50" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".3"/>
+    <rect x="250" y="60" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".3"/>
+    <rect x="235" y="70" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".3"/>
+    <rect x="260" y="50" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".5"/>
+    <rect x="244" y="80" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".4"/>
+    <rect x="270" y="90" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".3"/>
+    <rect x="255" y="100" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".5"/>
+    <rect x="245" y="110" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".4"/>
+    <rect x="265" y="120" width="140" height="8" rx="4" fill="#6c5ce7" opacity=".3"/>
+    <ellipse cx="310" cy="90" rx="70" ry="48" fill="none" stroke="#a29bfe" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="270" y="185" fill="#8888bb" font-size="10">❓ 管子重叠区域 = 二维面积？</text>
+    <text x="270" y="198" fill="#6c5ce7" font-size="11">→ 王虹证明：在 3D 里至少是完整三维体积</text>
+    <!-- PDE 波 -->
+    <text x="20" y="235" fill="#a29bfe" font-size="13" font-weight="600">PDE 波动方程 → 随机数据下可解</text>
+    <!-- 正弦波 -->
+    <path d="M30,280 Q50,250 70,280 T110,280 T150,280 T190,280" fill="none" stroke="#6c5ce7" stroke-width="1.5" opacity=".5"/>
+    <path d="M30,290 Q60,260 90,290 T150,290 T210,290 T270,290" fill="none" stroke="#6c5ce7" stroke-width="1.5" opacity=".5"/>
+    <path d="M30,300 Q50,270 70,300 T110,300 T150,300 T190,300" fill="none" stroke="#fd79a8" stroke-width="2" opacity=".6"/>
+    <text x="200" y="285" fill="#8888bb" font-size="10">规则波 → 传统 PDE</text>
+    <!-- 随机波 -->
+    <path d="M350,270 L370,265 L380,278 L395,260 L410,275 L420,258 L435,272 L450,255 L460,270 L480,262" fill="none" stroke="#fd79a8" stroke-width="1.5" opacity=".3"/>
+    <path d="M350,290 L375,295 L385,280 L400,310 L415,270 L430,300 L445,275 L460,315 L475,280 L490,300" fill="none" stroke="#fd79a8" stroke-width="1.5" opacity=".3"/>
+    <path d="M350,280 L360,268 L370,285 L385,255 L400,290 L415,260 L430,295 L445,250 L460,285 L475,255 L490,295 L500,275" fill="none" stroke="#a29bfe" stroke-width="2" opacity=".8"/>
+    <text x="350" y="335" fill="#8888bb" font-size="10">随机粗糙初始条件 → 邓煜证明仍有解</text>
+    <text x="350" y="350" fill="#fd79a8" font-size="10">Gibbs 测度保持稳定</text>
+  </svg>
+</div>
+
 </section>
 
 <div class="divider">✦ ✦ ✦</div>
@@ -519,6 +739,7 @@ footer a{color:#6c5ce7;text-decoration:none}
   <li>📖 <a href="https://www.quantamagazine.org/shayan-oveis-gharan-wins-2026-imu-abacus-medal-20260723/" target="_blank">Abacus 奖 — Ben Brubaker</a></li>
   <li>🌐 <a href="https://www.quantamagazine.org/series/fields-and-abacus-medals-2026/" target="_blank">专题系列主页</a></li>
 </ul>
+
 <p style="font-size:.8rem;color:#5555aa;margin-top:16px">照片：Julien Pebrel/M.Y.O.P.（王虹）、Kristen Normand（邓煜）、Caroline Gutman（Tsimerman）、Phil Yam（Pardon）、Chona Kasinger（Oveis Gharan）</p>
 </section>
 
@@ -551,11 +772,11 @@ footer a{color:#6c5ce7;text-decoration:none}
 // ── Bottom tab highlight ──
 (function(){
   const tabs = document.querySelectorAll('.bottom-tab');
-  const sections = ['winners','wang','deng','math','inspiring'];
+  const ids = ['winners','wang','deng','other-winners','inspiring'];
   
   function updateTabs(){
     let current = '';
-    sections.forEach(id => {
+    ids.forEach(id => {
       const el = document.getElementById(id);
       if(el){
         const rect = el.getBoundingClientRect();
@@ -569,6 +790,35 @@ footer a{color:#6c5ce7;text-decoration:none}
   
   window.addEventListener('scroll', updateTabs, {passive:true});
   updateTabs();
+})();
+
+// ── Reading progress bar ──
+(function(){
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', function(){
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    if(h > 0) bar.style.width = (window.scrollY / h * 100) + '%';
+  }, {passive:true});
+})();
+
+// ── Collapsible side TOC groups ──
+function toggleGroup(header){
+  const items = header.nextElementSibling;
+  const arrow = header.querySelector('.arrow');
+  items.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ── Fade-in sections ──
+(function(){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {threshold:0.1});
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
 })();
 </script>
 
