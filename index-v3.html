@@ -216,6 +216,18 @@
   .hero { padding: 60px 12px 24px; min-height: 60vh; }
   .hero h1 { font-size: 1.6rem; }
   .hero .tagline { font-size: .78rem; padding: 6px 14px; }
+  .hero-banner img:nth-child(n+4) { display: none; }
+  .hero-banner img { width: 33.33%; }
+}
+/* Super-small: 360px foldables */
+@media(max-width:380px){
+  .hero { padding: 48px 10px 20px; min-height: 50vh; }
+  .hero h1 { font-size: 1.35rem; }
+  .hero .sub { font-size: .78rem; }
+  .hero .meta { font-size: .7rem; }
+  .hero .tagline { font-size: .72rem; padding: 5px 10px; }
+  .hero-banner img:nth-child(n+3) { display: none; }
+  .hero-banner img { width: 50%; }
 }
 
 /* ── Stats ── */
@@ -243,6 +255,11 @@
 }
 @media(max-width:768px){ .stats { gap: 20px; padding: 20px 12px; } }
 @media(max-width:768px){ .stat-num { font-size: 2rem; } }
+@media(max-width:380px){
+  .stats { gap: 12px; padding: 16px 8px; }
+  .stat-num { font-size: 1.6rem; }
+  .stat-label { font-size: .68rem; }
+}
 
 /* ── Section ── */
 .section-wrapper {
@@ -681,6 +698,11 @@
   display: block;
   margin: 0 auto;
   max-width: 100%;
+  height: auto;
+}
+@media(max-width:540px){
+  .math-diagram { padding: 16px 12px; }
+  .math-diagram h3 { font-size: .9rem; }
 }
 
 /* ── Insight box ── */
@@ -744,8 +766,10 @@
 }
 .cmp-table tr:hover td { background: var(--bg-warm); }
 @media(max-width:768px){ .cmp-table { font-size: .78rem; } }
-@media(max-width:480px){
-  .cmp-table { font-size: .7rem; }
+/* Table scroll wrapper for mobile */
+@media(max-width:540px){
+  .cmp-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cmp-table { font-size: .72rem; min-width: 480px; }
   .cmp-table td,
   .cmp-table th { padding: 6px 8px; }
 }
@@ -794,6 +818,13 @@ footer a { color: var(--accent); text-decoration: none; }
 @media(max-width:768px){ .big-card { padding: 24px; margin: 0 12px; } }
 @media(max-width:480px){ .big-card { padding: 20px; margin: 0 8px; } }
 @media(max-width:768px){ .chapter-image { padding: 0 12px; } }
+/* Tablet: compensate for editorial sidebar at right edge */
+@media(min-width:769px) and (max-width:1024px){
+  .section-wrapper,
+  .big-card {
+    padding-right: 160px; /* width of sidebar + gap */
+  }
+}
 
 /* ── Fade-in animation ── */
 .section-wrapper {
@@ -903,6 +934,21 @@ p { line-height: 1.85; }
   overflow-y: auto;
   padding: 8px 0; z-index: 500;
   scrollbar-width: thin;
+  transition: opacity .3s;
+}
+/* Tablet: push sidebar closer to edge, make narrower */
+@media(max-width:1024px){
+  .editorial-sidebar {
+    right: 8px;
+    width: 140px;
+    background: var(--bg-warm);
+    border-left: 1px solid var(--border);
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+}
+/* Mobile: hide sidebar, bottom-tabs handle navigation */
+@media(max-width:768px){
+  .editorial-sidebar { display: none; }
 }
 .editorial-sidebar::-webkit-scrollbar { width: 3px; }
 .editorial-sidebar::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
@@ -1534,6 +1580,7 @@ p { line-height: 1.85; }
 
 <p>王虹和邓煜的成长轨迹有很多相似之处——也有很多<strong>不同</strong>。这些故事不是在教你怎么当数学家，而是在展示：<strong>一个人怎么一步一步变成他自己</strong>。</p>
 
+<div class="cmp-table-wrap">
 <table class="cmp-table">
   <tr><th>维度</th><th>王虹</th><th>邓煜</th></tr>
   <tr><td><strong>出身</strong></td><td>桂林，父母都是老师，宽松自由</td><td>深圳渔村，母亲医生，父亲工程师</td></tr>
@@ -1545,6 +1592,7 @@ p { line-height: 1.85; }
   <tr><td><strong>核心成果</strong></td><td>三维 Kakeya 猜想（127 页证明）</td><td>随机数据 PDE 可解性 + 波动力学收敛</td></tr>
   <tr><td><strong>今天</strong></td><td>早起散步看狗，不读书不养狗</td><td>空客厅，不开车，读漫画逐行读论文</td></tr>
 </table>
+</div>
 
 <div class="insight-box">
   <h3>🔑 比"努力"更重要的东西</h3>
